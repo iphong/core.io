@@ -6,11 +6,13 @@ DOCUMENTATION:
 Modules
 --------
 Require modules:
+
     var foo = require('foo');
     var bar = require('./bar');
     var views = require('../lib/deploy/views.js');
 
 Export modules:
+
     exports.foo = function() {
          /* function */
     }
@@ -20,6 +22,7 @@ Export modules:
 Workers
 ---------
 Exec file in a new process:
+
     // From main script
     Core.exec('id3-parser.js', file, '.mp3', function(e, res) {
         /* Callback with result and terminate worker when done */
@@ -36,6 +39,7 @@ Exec file in a new process:
     });
 
 Spawn new worker:
+
     var worker = Core.spawn('worker.js');
     
     // Exchanging data between host and workers using events
@@ -65,7 +69,18 @@ Spawn new worker:
     // Define worker's main function for process stacking
     worker(function(arg1[,arg2,...]) {
         /* Executing worker task here */
-        
         return result;
     });
+
+Worker Clusters
+-----------------
+
+    // Create new worker pool
+    var cluster = Core.cluster( 'worker.js', 4 /* number of workers */ );
+    
+    // Push new task to the cluster stack
+    cluster.stack('render', 'hight-quality', img_data, callback);
+    
+    // Above function wait for next available worker to execute it, and
+    // callback when it completes.
     
