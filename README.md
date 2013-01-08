@@ -143,7 +143,8 @@ the worker process to end:
 After this the worker is now free, and ready to receive another task.
 
 
-// WORKER CLUSTER
+CLUSTER & LOAD BALANCING
+------------------------
 
 -- Instruction for creating worker cluster is coming shortly.
 -- Cluster provides process balancing using multiple workers.
