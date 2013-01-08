@@ -63,7 +63,7 @@ Finally in your app.js
 
 This simply put your requests in a queue stack. When you send new request to a busy
 worker, it will be put on hold, and the worker will process it as soon as it finishes
-the current task. And if multiple request are send, it will process one by one in the
+the current task. And if multiple requests are send, it will process one by one in the
 order it was given.
 
 For example:
@@ -84,7 +84,7 @@ in your worker.js:
     });
 
 If your calculation requires asynchronous calls, don't return any value.
-Use the next function instead. The next function is always the last argument.
+Use the next() function instead. The next() function is always the last argument.
     
     worker.stack(function( task, file, next ) {
         if (task=='calcMD5') {
@@ -121,10 +121,10 @@ immediate process, in your app.js, do this:
         ...
     });
 
-This will tell the worker to do this task immediate, and continue with other
+This will tell the worker to do this task immediately, and continue with other
 requests after.
 
-If you want to cancel whatever the work is doing, and clear it queue stack.
+If you want to cancel whatever the worker is doing, and clear its queue stack.
 
 In your app.js
     
