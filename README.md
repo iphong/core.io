@@ -16,6 +16,12 @@ complicated and quite confusing for people that doesn't much experience.
 And core.js is there for you. We did the hard work and you complete your
 ideas.
 
+One more thing. Core.js also provide a Class Prototyping system, that lets
+you extend core.js functionalities. It also allows you to create your own
+Classes and extend to your own sub classes, similar to prototype.js. 
+
+Core.js is the core of your next great app.
+
 
 EXAMPLES
 ====================
