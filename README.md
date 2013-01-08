@@ -1,86 +1,155 @@
-core.js
-=======
+CORE.JS
+====================
 
-DOCUMENTATION:
+Unleashed the power of your web apps, and free your UI. Core.js allows 
+you to take control of the power of multi-core processing with ease.
+Tasks like sending ajax requests and handling local files have become
+very common nowadays in a standard web applications. And as you developers
+might have noticed, this BLOCKS your UI, as more and more background tasks
+are running. And when it comes to heavy tasks such as handling local files, 
+your UI FREEZES. Users don't like it at all. In fact, for users like me, I
+don't come back anymore. This is where developers go back to the the
+conventional way of making web apps. It's to go page by page. So where is
+the greatness of a single page app? The answer is Web Worker. Many web
+apps have already implemented this. But working with web workers is rather
+complicated and quite confusing for people that doesn't much experience.
+And core.js is there for you. We did the hard work and you complete your
+ideas.
 
-Modules
---------
-Require modules:
 
-    var foo = require('foo');
-    var bar = require('./bar');
-    var views = require('../lib/deploy/views.js');
+EXAMPLES
+====================
 
-Export modules:
+To create new worker:
+    
+    var worker = new Core.Worker('worker.js');
 
-    exports.foo = function() {
-         /* function */
-    }
-    module.exports = function(){
-        /* function */
-    };
-Workers
----------
-Exec file in a new process:
+In your 'worker.js' file:
+    
+    // Include the core.js library
+    importScripts('core.js');
+    
+    // Then write your worker codes here
+    ...
 
-    // From main script
-    Core.exec('id3-parser.js', file, '.mp3', function(e, res) {
-        /* Callback with result and terminate worker when done */
-    });
-    
-    // Inside id3-parser.js
-    var _ = require('underscore');
-    var ID3 = require('core-id3');
-    worker(function(file, type) {
-        // Execute worker process here
-        var tags = new ID3.parser(file);
-        // Returning result will be passed as callback argument
-        return tags;
-    });
 
-Spawn new worker:
+So what is the different?
 
-    var worker = Core.spawn('worker.js');
+With core.js there are 2 ways to interact with your workers (More is on the way).
+
+1. First is by emitting and listenning to events. For example:
+
+In your main app.js:
     
-    // Exchanging data between host and workers using events
-    worker.emit('foo', 'some data');
-    worker.on('bar', function(result) {
-        /* render result here */
-    });
+    worker.emit('upload', file);
+
+And in your worker.js
     
-    // Manipulating worker process stacks
-    worker.stack('upload', file, callback);
-    
-    // Repeat the above code to add more job to worker's stack queue.
-    // worker will execute one by one synchronously.
-    
-    // To squeeze in another task in the middle of the stack
-    // for immediate process, use:
-    worker.next('upload', important_file, callback);
-    
-    // The above request will be processed as soon as the current task
-    // is completed.
-    
-    // Listen to events inside worker.js
-    on('foo', function(data) {
-        emit('bar', 'response data');
-    });
-    
-    // Define worker's main function for process stacking
-    worker(function(arg1[,arg2,...]) {
-        /* Executing worker task here */
-        return result;
+    worker.on('upload', function(file) {
+        // Do your upload here
+        ...
+        
+       // When upload is finished.
+       worker.emit('done');
     });
 
-Worker Clusters
------------------
+Finally in your app.js
+    
+    worker.on('done', function() {
+        // Do something here when upload finishes.
+    });
 
-    // Create new worker pool
-    var cluster = Core.cluster( 'worker.js', 4 /* number of workers */ );
+2. Second is what called process stacking.
+
+This simply put your requests in a queue stack. When you send new request to a busy
+worker, it will be put on hold, and the worker will process it as soon as it finishes
+the current task. And if multiple request are send, it will process one by one in the
+order it was given.
+
+For example:
     
-    // Push new task to the cluster stack
-    cluster.stack('render', 'hight-quality', img_data, callback);
+in your worker.js:
     
-    // Above function wait for next available worker to execute it, and
-    // callback when it completes.
+    worker.stack(function( task, file ) {
+        if (task=='calcMD5') {
+            var result;
+            // Do your MD5 calculation here
+            ...
+            
+            // returned value will be the first argument
+            // in the callback function.
+            
+            return result;
+        }
+    });
+
+If your calculation requires asynchronous calls, don't return any value.
+Use the next function instead. The next function is always the last argument.
+    
+    worker.stack(function( task, file, next ) {
+        if (task=='calcMD5') {
+            ajax('http://blah.com', function(result) {
+                 // Do your MD5 calculation here
+                ...
+                
+                callback(result);
+            });
+        }
+    });
+
+or simply:
+    
+    worker.stack(function( task, file, next ) {
+        if (task=='calcMD5') {
+            ajax('http://blah.com', next);
+        }
+    });
+
+
+To push a new task to the worker stack, in your app.js, do this:
+
+    worker.push('calcMD5', file, function( result ) {
+        // Result is called back when this task is completed.
+        ...
+    });
+
+If your stack queue is long, and you have an important job that requires
+immediate process, in your app.js, do this:
+    
+    worker.next('upload', file, function() {
+        // Call back when upload is finished
+        ...
+    });
+
+This will tell the worker to do this task immediate, and continue with other
+requests after.
+
+If you want to cancel whatever the work is doing, and clear it queue stack.
+
+In your app.js
+    
+    worker.stop(function() {
+        // Callback when worker successfully stopped.
+    });
+
+The above code sends a stop signal to the worker, and as soon as the worker
+receives the signal it will emit a 'quit' event back to comfirm.
+    
+If the worker takes too long to response, you can send a kill command to force
+the worker process to end:
+    
+    worker.kill();
+
+After this the worker is now free, and ready to receive another task.
+
+
+// WORKER CLUSTER
+
+-- Instruction for creating worker cluster is coming shortly.
+-- Cluster provides process balancing using multiple workers.
+
+
+
+
+
     
