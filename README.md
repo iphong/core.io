@@ -1,4 +1,4 @@
-CORE.JS
+CORE.JS (OUTDATED & NEW VERSION IS BEING UPDATED)
 ====================
 
 Unleashed the power of your web apps, and free your UI. Core.js allows 
