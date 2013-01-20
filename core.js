@@ -1,4 +1,6 @@
-
+//     Core.js 0.0.1 beta
+//     
+//     (c) 2012-2013 Phong Vu.
 
 // Avoid `console` errors in browsers that lack a console.
 !function( root ) {
