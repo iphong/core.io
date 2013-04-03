@@ -4,7 +4,7 @@
 
 ## How to use?
 
-### Installation
+  <script src="/lib/core.io/core.js"></script>
 
 ### Spawning workers
 
