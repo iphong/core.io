@@ -4,70 +4,70 @@
 
 ## How to use?
 
-  <script src="/lib/core.io/core.js"></script>
+    <script src="/lib/core.io/core.js"></script>
 
 ### Creating workers
 
-  var worker = new Core.Worker('worker.js');
+    var worker = new Core.Worker('worker.js');
 
 
 ### Creating clusters
 
-  var cluster = new Core.Cluster('worker.js');
+    var cluster = new Core.Cluster('worker.js');
   
-  // Add new worker to cluster
+    // Add new worker to cluster
 
-  cluster.fork();
+    cluster.fork();
 
 ### Worker file
 
-  // Export methods which can be called directly from master thread.
+    // Export methods which can be called directly from master thread.
 
-  exports.foo = function( arg ) {
+    exports.foo = function( arg ) {
 
-    // The return value will be passed as first argument in master's callback fn.
+      // The return value will be passed as first argument in master's callback fn.
 
-    return arg;
+      return arg;
 
-  }
+    }
 
 ### Executing worker's functions
 
-  worker.foo('bar', function(result) {
+    worker.foo('bar', function(result) {
 
-    // Result should be "bar"
+      // Result should be "bar"
 
-  }
+    }
 
-  // Calling functions from a cluster is auto load distributed to all workers
+    // Calling functions from a cluster is auto load distributed to all workers
 
-  cluster.foo('bar', function(result) {
+    cluster.foo('bar', function(result) {
 
-    // Result should be "bar"
+      // Result should be "bar"
 
-  }
+    }
 
 ### Evented I/O
 
 Communication between master thread and worker's process can be done by emitting and listenning to events.
 
-  // in worker.js
+    // in worker.js
 
-  worker.on('foo', function( arg ) {
+    worker.on('foo', function( arg ) {
 
-    worker.emit('bar', arg);
+      worker.emit('bar', arg);
 
-  }
+    }
 
-  // in main app
+    // in main app
 
-  worker.emit('foo', 'some value');
+    worker.emit('foo', 'some value');
 
-  worker.on('bar', function( arg ) {
+    worker.on('bar', function( arg ) {
 
-    console.log(arg);
+      console.log(arg);
 
-  }
+    }
 
 
 ## Worker (filename, options)
