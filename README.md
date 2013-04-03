@@ -1,11 +1,19 @@
 # Core.io
 ---------------------------
 
-## How to use
 
-## Worker
+## How to use?
 
-## Cluster
+### Installation
 
-## Buffer
+### Spawning workers
+
+
+## Worker (filename, options)
+
+
+## Cluster (filename, options)
+
+
+## Buffer (string, encoding)
 
