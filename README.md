@@ -132,6 +132,9 @@ When worker executes a function it return an instance of Promise(). Events bound
 ### Core.Buffer (string, encoding)
 
 
+
+
+
 --------------------------------------
 This library is developed by Phong Vu.
 
