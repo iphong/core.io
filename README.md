@@ -1,4 +1,7 @@
-# Core.io
+The current version is still in beta and is not ready for production.
+
+
+# core.io
 ---------------------------
 
 
@@ -127,4 +130,8 @@ When worker executes a function it return an instance of Promise(). Events bound
 
 
 ### Core.Buffer (string, encoding)
+
+
+--------------------------------------
+This library is developed by Phong Vu.
 
